@@ -1,0 +1,25 @@
+OBRAS DE ARTE - SISTEMA DE GESTIÓN
+Fecha de guardado: 2025-10-02T10:00:03.030489300
+Total de obras: 2
+=====================================
+
+ID: 87312
+Nombre: Mona Lisa
+Año de creación: 1503
+Edad: 522 años
+Tipo: Pintura
+Serial: SER-87312
+País: Paris
+Ciudad: Ciudad Principal
+-------------------------------------
+
+ID: 9812738912
+Nombre: Noche Estrellada
+Año de creación: 1889
+Edad: 136 años
+Tipo: Pintura
+Serial: SER-9812738912
+País: Estados Unidos
+Ciudad: Ciudad Principal
+-------------------------------------
+
