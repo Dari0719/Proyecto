@@ -1,83 +1,60 @@
-package co.edu.poli.actividad5.servicios;
-
-import co.edu.poli.actividad5.model.ObraArte;
-
+package co.edu.poli.parcial2.servicios;
+import co.edu.poli.parcial2.model.ObraArte;
+/**
+ * Implementación de las operaciones CRUD con almacenamiento en memoria.
+ */
 public class ImplementacionOperacionCRUD implements OperacionCRUD {
     
-    /** Arreglo estático para almacenar las obras de arte */
+    /** Arreglo estático para almacenar obras */
     private static ObraArte[] obras;
-    /** Tamaño inicial del arreglo */
-    private static final int TAMANIO_INICIAL = 100;
+    /** Tamaño del arreglo */
+    private static final int TAMANIO = 50;
+    /** Archivo binario para serialización */
+    private static final String ARCHIVO_BINARIO = "museo_obras.dat";
     
     /**
-     * Constructor que inicializa el arreglo de obras
+     * Constructor que inicializa el arreglo
      */
     public ImplementacionOperacionCRUD() {
         if (obras == null) {
-            obras = new ObraArte[TAMANIO_INICIAL];
+            obras = new ObraArte[TAMANIO];
         }
     }
     
-    /**
-     * {@inheritDoc}
-     * Busca el primer espacio null de izquierda a derecha para insertar.
-     * Si no hay espacio, expande el arreglo automáticamente.
-     */
     @Override
     public boolean create(ObraArte obra) {
-        if (obra == null) {
-            System.out.println("Error: No se puede crear una obra nula.");
+        if (obra == null || obra.getCodigo() == null || obra.getCodigo().trim().isEmpty()) {
+            System.out.println("❌ Error: Obra o código inválido.");
             return false;
         }
         
-        if (obra.getId() == null || obra.getId().trim().isEmpty()) {
-            System.out.println("Error: La obra debe tener un ID válido.");
+        // Verificar si ya existe
+        if (read(obra.getCodigo()) != null) {
+            System.out.println("❌ Error: Ya existe una obra con el código: " + obra.getCodigo());
             return false;
         }
         
-        // Verificar si ya existe una obra con ese ID
-        if (read(obra.getId()) != null) {
-            System.out.println("Error: Ya existe una obra con el ID: " + obra.getId());
-            return false;
-        }
-        
-        // Buscar el primer espacio null
+        // Buscar primer espacio null
         for (int i = 0; i < obras.length; i++) {
             if (obras[i] == null) {
                 obras[i] = obra;
-                System.out.println("Obra creada exitosamente con ID: " + obra.getId());
+                System.out.println("✅ Obra creada exitosamente con código: " + obra.getCodigo());
                 return true;
             }
         }
         
-        // Si no hay espacio, expandir el arreglo
-        expandirArreglo();
-        // Intentar nuevamente
-        for (int i = 0; i < obras.length; i++) {
-            if (obras[i] == null) {
-                obras[i] = obra;
-                System.out.println("Obra creada exitosamente con ID: " + obra.getId() + 
-                                 " (arreglo expandido)");
-                return true;
-            }
-        }
-        
+        System.out.println("❌ Error: No hay espacio disponible en la colección.");
         return false;
     }
     
-    /**
-     * {@inheritDoc}
-     * Busca la obra por ID en todo el arreglo.
-     */
     @Override
-    public ObraArte read(String id) {
-        if (id == null || id.trim().isEmpty()) {
-            System.out.println("Error: El ID no puede ser nulo o vacío.");
+    public ObraArte read(String codigo) {
+        if (codigo == null || codigo.trim().isEmpty()) {
             return null;
         }
         
         for (int i = 0; i < obras.length; i++) {
-            if (obras[i] != null && id.equals(obras[i].getId())) {
+            if (obras[i] != null && codigo.equals(obras[i].getCodigo())) {
                 return obras[i];
             }
         }
@@ -85,72 +62,54 @@ public class ImplementacionOperacionCRUD implements OperacionCRUD {
         return null;
     }
     
-    /**
-     * {@inheritDoc}
-     * Encuentra la obra por ID y actualiza sus datos.
-     */
     @Override
-    public boolean update(String id, ObraArte obra) {
-        if (id == null || id.trim().isEmpty()) {
-            System.out.println("Error: El ID no puede ser nulo o vacío.");
-            return false;
-        }
-        
-        if (obra == null) {
-            System.out.println("Error: Los nuevos datos de la obra no pueden ser nulos.");
+    public boolean update(String codigo, ObraArte obra) {
+        if (codigo == null || obra == null) {
+            System.out.println("❌ Error: Datos inválidos.");
             return false;
         }
         
         for (int i = 0; i < obras.length; i++) {
-            if (obras[i] != null && id.equals(obras[i].getId())) {
-                // Mantener el ID original
-                obra.setId(id);
+            if (obras[i] != null && codigo.equals(obras[i].getCodigo())) {
+                obra.setCodigo(codigo); // Mantener código original
                 obras[i] = obra;
-                System.out.println("Obra actualizada exitosamente con ID: " + id);
+                System.out.println("✅ Obra actualizada exitosamente.");
                 return true;
             }
         }
         
-        System.out.println("Error: No se encontró una obra con el ID: " + id);
+        System.out.println("❌ Error: No se encontró la obra con código: " + codigo);
         return false;
     }
     
-    /**
-     * {@inheritDoc}
-     * Encuentra la obra por ID y la elimina (asigna null).
-     */
     @Override
-    public boolean delete(String id) {
-        if (id == null || id.trim().isEmpty()) {
-            System.out.println("Error: El ID no puede ser nulo o vacío.");
+    public boolean delete(String codigo) {
+        if (codigo == null || codigo.trim().isEmpty()) {
+            System.out.println("❌ Error: Código inválido.");
             return false;
         }
         
         for (int i = 0; i < obras.length; i++) {
-            if (obras[i] != null && id.equals(obras[i].getId())) {
-                System.out.println("Obra eliminada: " + obras[i].getNombre() + 
-                                 " (ID: " + id + ")");
+            if (obras[i] != null && codigo.equals(obras[i].getCodigo())) {
+                System.out.println("✅ Obra eliminada: " + obras[i].getTitulo());
                 obras[i] = null;
                 return true;
             }
         }
         
-        System.out.println("Error: No se encontró una obra con el ID: " + id);
+        System.out.println("❌ Error: No se encontró la obra con código: " + codigo);
         return false;
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public ObraArte[] listAll() {
         return obras;
     }
     
     /**
-     * {@inheritDoc}
+     * Cuenta las obras válidas en el arreglo
+     * @return Número de obras
      */
-    @Override
     public int count() {
         int contador = 0;
         for (int i = 0; i < obras.length; i++) {
@@ -162,20 +121,10 @@ public class ImplementacionOperacionCRUD implements OperacionCRUD {
     }
     
     /**
-     * Expande el arreglo al doble de su tamaño actual
-     */
-    private void expandirArreglo() {
-        ObraArte[] nuevoArreglo = new ObraArte[obras.length * 2];
-        System.arraycopy(obras, 0, nuevoArreglo, 0, obras.length);
-        obras = nuevoArreglo;
-        System.out.println("Arreglo expandido a " + obras.length + " posiciones.");
-    }
-    
-    /**
-     * Lista solo las obras que no son null
+     * Obtiene solo las obras válidas (no null)
      * @return Arreglo con obras válidas
      */
-    public ObraArte[] listValidObras() {
+    public ObraArte[] getObrasValidas() {
         ObraArte[] obrasValidas = new ObraArte[count()];
         int index = 0;
         
@@ -186,5 +135,79 @@ public class ImplementacionOperacionCRUD implements OperacionCRUD {
         }
         
         return obrasValidas;
+    }
+    
+    /**
+     * Serializa todas las obras en un archivo binario
+     * @return true si se serializó correctamente
+     */
+    public boolean serializar() {
+        try (java.io.ObjectOutputStream oos = new java.io.ObjectOutputStream(
+                new java.io.FileOutputStream(ARCHIVO_BINARIO))) {
+            
+            oos.writeObject(obras);
+            oos.flush();
+            
+            java.io.File archivo = new java.io.File(ARCHIVO_BINARIO);
+            System.out.println("\n✅ SERIALIZACIÓN EXITOSA");
+            System.out.println("   Archivo: " + ARCHIVO_BINARIO);
+            System.out.println("   Obras guardadas: " + count());
+            System.out.println("   Tamaño: " + archivo.length() + " bytes");
+            System.out.println("   Ruta: " + archivo.getAbsolutePath());
+            
+            return true;
+            
+        } catch (java.io.IOException e) {
+            System.out.println("❌ Error al serializar: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Deserializa las obras desde un archivo binario
+     * @return true si se deserializó correctamente
+     */
+    public boolean deserializar() {
+        java.io.File archivo = new java.io.File(ARCHIVO_BINARIO);
+        
+        if (!archivo.exists()) {
+            System.out.println("❌ El archivo " + ARCHIVO_BINARIO + " no existe.");
+            return false;
+        }
+        
+        try (java.io.ObjectInputStream ois = new java.io.ObjectInputStream(
+                new java.io.FileInputStream(ARCHIVO_BINARIO))) {
+            
+            int obrasAntes = count();
+            obras = (ObraArte[]) ois.readObject();
+            int obrasDespues = count();
+            
+            System.out.println("\n✅ DESERIALIZACIÓN EXITOSA");
+            System.out.println("   Archivo: " + ARCHIVO_BINARIO);
+            System.out.println("   Obras antes: " + obrasAntes);
+            System.out.println("   Obras cargadas: " + obrasDespues);
+            
+            return true;
+            
+        } catch (java.io.IOException | ClassNotFoundException e) {
+            System.out.println("❌ Error al deserializar: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Obtiene el nombre del archivo binario
+     * @return Nombre del archivo
+     */
+    public String getArchivoBinario() {
+        return ARCHIVO_BINARIO;
+    }
+    
+    /**
+     * Verifica si existe el archivo binario
+     * @return true si existe
+     */
+    public boolean existeArchivoBinario() {
+        return new java.io.File(ARCHIVO_BINARIO).exists();
     }
 }

@@ -1,88 +1,74 @@
-package co.edu.poli.actividad5.model;
+package co.edu.poli.parcial2.model;
 
 /**
  * Clase abstracta que representa una obra de arte genérica.
- * Sirve como clase padre para diferentes tipos de obras de arte.
+ * Contiene atributos comunes a todas las obras del museo.
  * 
- * @author Sistema de Gestión de Arte
+ * @author Sistema de Gestión de Museo
  * @version 1.0
  */
-public abstract class ObraArte {
-    /** Pintura asociada a la obra */
-    private Pintura pintura;
-    /** Escultura asociada a la obra */
-    private Escultura escultura;
-    /** Nombre de la obra de arte */
-    private String nombre;
-    /** Lugar donde se encuentra la obra */
-    private Lugar lugar;
-    /** Horarios de visita */
-    private Horario[] horario;
-    /** Año de creación de la obra */
-    private int anioCreacion;
-    /** ID único de la obra */
-    private String id;
-
+public abstract class ObraArte implements java.io.Serializable {
+    private static final long serialVersionUID = 1L;
+    
+    /** Código único de la obra */
+    private String codigo;
+    /** Título de la obra */
+    private String titulo;
+    /** Fecha de creación de la obra */
+    private String fechaCreacion;
+    /** Dimensiones de la obra */
+    private String dimensiones;
+    /** Artista creador de la obra */
+    private Artista artista;
+    
     /**
      * Constructor por defecto
      */
-    public ObraArte() {
-        this.horario = new Horario[10]; // Inicializar con capacidad para 10 horarios
-    }
-
+    public ObraArte() {}
+    
     /**
      * Constructor con parámetros
-     * @param nombre Nombre de la obra
-     * @param lugar Lugar donde se encuentra
-     * @param anioCreacion Año de creación
-     * @param id Identificador único
+     * @param codigo Código único
+     * @param titulo Título de la obra
+     * @param fechaCreacion Fecha de creación
+     * @param dimensiones Dimensiones
+     * @param artista Artista asociado
      */
-    public ObraArte(String nombre, Lugar lugar, int anioCreacion, String id) {
-        this();
-        this.nombre = nombre;
-        this.lugar = lugar;
-        this.anioCreacion = anioCreacion;
-        this.id = id;
+    public ObraArte(String codigo, String titulo, String fechaCreacion, 
+                    String dimensiones, Artista artista) {
+        this.codigo = codigo;
+        this.titulo = titulo;
+        this.fechaCreacion = fechaCreacion;
+        this.dimensiones = dimensiones;
+        this.artista = artista;
     }
-
-    /**
-     * Calcula la edad de la obra de arte
-     * @return Edad en años
-     */
-    public int calcularEdad() {
-        return java.time.Year.now().getValue() - anioCreacion;
-    }
-
+    
     // Getters y Setters
-    public Pintura getPintura() { return pintura; }
-    public void setPintura(Pintura pintura) { this.pintura = pintura; }
+    public String getCodigo() { return codigo; }
+    public void setCodigo(String codigo) { this.codigo = codigo; }
     
-    public Escultura getEscultura() { return escultura; }
-    public void setEscultura(Escultura escultura) { this.escultura = escultura; }
+    public String getTitulo() { return titulo; }
+    public void setTitulo(String titulo) { this.titulo = titulo; }
     
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public String getFechaCreacion() { return fechaCreacion; }
+    public void setFechaCreacion(String fechaCreacion) { this.fechaCreacion = fechaCreacion; }
     
-    public Lugar getLugar() { return lugar; }
-    public void setLugar(Lugar lugar) { this.lugar = lugar; }
+    public String getDimensiones() { return dimensiones; }
+    public void setDimensiones(String dimensiones) { this.dimensiones = dimensiones; }
     
-    public Horario[] getHorario() { return horario; }
-    public void setHorario(Horario[] horario) { this.horario = horario; }
+    public Artista getArtista() { return artista; }
+    public void setArtista(Artista artista) { this.artista = artista; }
     
-    public int getAnioCreacion() { return anioCreacion; }
-    public void setAnioCreacion(int anioCreacion) { this.anioCreacion = anioCreacion; }
+    /**
+     * Método abstracto para obtener el tipo de obra
+     * @return Tipo de obra
+     */
+    public abstract String getTipoObra();
     
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
-
     @Override
     public String toString() {
-        return "ObraArte{" +
-                "id='" + id + '\'' +
-                ", nombre='" + nombre + '\'' +
-                ", anioCreacion=" + anioCreacion +
-                ", edad=" + calcularEdad() + " años" +
-                '}';
+        return "Código: " + codigo + ", Título: " + titulo + 
+               ", Tipo: " + getTipoObra() + ", Artista: " + 
+               (artista != null ? artista.getNombre() : "N/A");
     }
 }
-

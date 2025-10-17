@@ -1,76 +1,47 @@
-package co.edu.poli.actividad5.model;
+package co.edu.poli.parcial2.model;
 
-public class Escultura {
-    /** Nombre de la escultura */
-    private String nombre;
-    /** Tamaño de la escultura */
-    private String tamanio;
-    /** Material de la escultura */
+/**
+ * Clase que representa una escultura.
+ * Extiende ObraArte e incluye el material del que está hecha.
+ */
+public class Escultura extends ObraArte {
+    private static final long serialVersionUID = 1L;
+    
+    /** Material del que está hecha (mármol, bronce, etc.) */
     private String material;
-    /** Autor de la escultura */
-    private Autor autor;
-    /** Número serial */
-    private String serial;
-    /** Referencia de la escultura */
-    private String referencia;
-    /** Medida en metros cúbicos */
-    private double medida;
-
+    
     /**
      * Constructor por defecto
      */
-    public Escultura() {}
-
+    public Escultura() {
+        super();
+    }
+    
     /**
      * Constructor con parámetros
-     * @param nombre Nombre
-     * @param tamanio Tamaño
-     * @param material Material
-     * @param autor Autor
-     * @param serial Serial
-     * @param referencia Referencia
-     * @param medida Medida
+     * @param codigo Código único
+     * @param titulo Título
+     * @param fechaCreacion Fecha de creación
+     * @param dimensiones Dimensiones
+     * @param artista Artista
+     * @param material Material empleado
      */
-    public Escultura(String nombre, String tamanio, String material, Autor autor, 
-                    String serial, String referencia, double medida) {
-        this.nombre = nombre;
-        this.tamanio = tamanio;
+    public Escultura(String codigo, String titulo, String fechaCreacion, 
+                     String dimensiones, Artista artista, String material) {
+        super(codigo, titulo, fechaCreacion, dimensiones, artista);
         this.material = material;
-        this.autor = autor;
-        this.serial = serial;
-        this.referencia = referencia;
-        this.medida = medida;
     }
-
-    // Getters y Setters
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-    
-    public String getTamanio() { return tamanio; }
-    public void setTamanio(String tamanio) { this.tamanio = tamanio; }
     
     public String getMaterial() { return material; }
     public void setMaterial(String material) { this.material = material; }
     
-    public Autor getAutor() { return autor; }
-    public void setAutor(Autor autor) { this.autor = autor; }
+    @Override
+    public String getTipoObra() {
+        return "ESCULTURA";
+    }
     
-    public String getSerial() { return serial; }
-    public void setSerial(String serial) { this.serial = serial; }
-    
-    public String getReferencia() { return referencia; }
-    public void setReferencia(String referencia) { this.referencia = referencia; }
-    
-    public double getMedida() { return medida; }
-    public void setMedida(double medida) { this.medida = medida; }
-
     @Override
     public String toString() {
-        return "Escultura{" +
-                "nombre='" + nombre + '\'' +
-                ", autor=" + (autor != null ? autor.getNombre() : "N/A") +
-                ", material='" + material + '\'' +
-                ", serial='" + serial + '\'' +
-                '}';
+        return super.toString() + ", Material: " + material;
     }
 }

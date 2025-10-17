@@ -1,68 +1,47 @@
-package co.edu.poli.actividad5.model;
+package co.edu.poli.parcial2.model;
 
-public class Pintura {
-    /** Nombre de la pintura */
-    private String nombre;
-    /** Autor de la pintura */
-    private Autor autor;
-    /** Tamaño de la pintura */
-    private String tamanio;
-    /** Inspiración de la pintura */
-    private String inspiracion;
-    /** Número serial */
-    private String serial;
-    /** Medida en metros cuadrados */
-    private double medida;
-
+/**
+ * Clase que representa una pintura.
+ * Extiende ObraArte e incluye la técnica empleada.
+ */
+public class Pintura extends ObraArte {
+    private static final long serialVersionUID = 1L;
+    
+    /** Técnica empleada (óleo, acuarela, etc.) */
+    private String tecnica;
+    
     /**
      * Constructor por defecto
      */
-    public Pintura() {}
-
+    public Pintura() {
+        super();
+    }
+    
     /**
      * Constructor con parámetros
-     * @param nombre Nombre
-     * @param autor Autor
-     * @param tamanio Tamaño
-     * @param inspiracion Inspiración
-     * @param serial Serial
-     * @param medida Medida
+     * @param codigo Código único
+     * @param titulo Título
+     * @param fechaCreacion Fecha de creación
+     * @param dimensiones Dimensiones
+     * @param artista Artista
+     * @param tecnica Técnica empleada
      */
-    public Pintura(String nombre, Autor autor, String tamanio, String inspiracion, String serial, double medida) {
-        this.nombre = nombre;
-        this.autor = autor;
-        this.tamanio = tamanio;
-        this.inspiracion = inspiracion;
-        this.serial = serial;
-        this.medida = medida;
+    public Pintura(String codigo, String titulo, String fechaCreacion, 
+                   String dimensiones, Artista artista, String tecnica) {
+        super(codigo, titulo, fechaCreacion, dimensiones, artista);
+        this.tecnica = tecnica;
     }
-
-    // Getters y Setters
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
     
-    public Autor getAutor() { return autor; }
-    public void setAutor(Autor autor) { this.autor = autor; }
+    public String getTecnica() { return tecnica; }
+    public void setTecnica(String tecnica) { this.tecnica = tecnica; }
     
-    public String getTamanio() { return tamanio; }
-    public void setTamanio(String tamanio) { this.tamanio = tamanio; }
+    @Override
+    public String getTipoObra() {
+        return "PINTURA";
+    }
     
-    public String getInspiracion() { return inspiracion; }
-    public void setInspiracion(String inspiracion) { this.inspiracion = inspiracion; }
-    
-    public String getSerial() { return serial; }
-    public void setSerial(String serial) { this.serial = serial; }
-    
-    public double getMedida() { return medida; }
-    public void setMedida(double medida) { this.medida = medida; }
-
     @Override
     public String toString() {
-        return "Pintura{" +
-                "nombre='" + nombre + '\'' +
-                ", autor=" + (autor != null ? autor.getNombre() : "N/A") +
-                ", tamanio='" + tamanio + '\'' +
-                ", serial='" + serial + '\'' +
-                '}';
+        return super.toString() + ", Técnica: " + tecnica;
     }
 }
